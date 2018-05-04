@@ -7,4 +7,10 @@
     <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
     <p>{{ storageUsed }}GB used out of {{ totalStorage }}GB</p>
   </div>
+  <button class="settings-btn">
+    <i class="fas fa-cog"></i>
+  </button>
+  <button class="sign-out-btn" (click)="signOut()">
+    <i class="fas fa-sign-out-alt"></i>
+  </button>
 </div>

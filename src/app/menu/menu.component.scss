@@ -2,7 +2,32 @@
   height: 100%;
   width: 100%;
   background-color: rgb(88, 102, 124);
-  padding: 20px;
+  padding: 40px 20px;
+  user-select: none;
+  position: relative;
+  .sign-out-btn,
+  .settings-btn {
+    transition: 200ms ease-in;
+    position: absolute;
+    bottom: 20px;
+    background-color: transparent;
+    border: none;
+    outline: transparent;
+    cursor: pointer;
+    i {
+      color: white;
+      font-size: 30px;
+    }
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  .settings-btn {
+    left: 20px;
+  }
+  .sign-out-btn {
+    right: 20px;
+  }
   .user-info {
     width: 100%;
     i {
