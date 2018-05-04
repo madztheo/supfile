@@ -1,7 +1,9 @@
 .main-container {
+  user-select: none;
   display: inline-block;
   width: 100px;
   margin: 10px;
+  background-color: transparent;
   p {
     white-space: nowrap;
     overflow: hidden;

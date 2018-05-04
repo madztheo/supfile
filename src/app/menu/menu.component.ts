@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "supfile-menu",
@@ -11,6 +12,8 @@ export class MenuComponent {
   chartOptions: any;
   storageUsed = 10;
   totalStorage = 30;
+
+  constructor(private router: Router) {}
 
   setChartData() {
     this.chartData = {
@@ -38,5 +41,9 @@ export class MenuComponent {
   ngOnInit() {
     this.setChartData();
     this.setChartOptions();
+  }
+
+  signOut() {
+    this.router.navigate(["/login"]);
   }
 }
