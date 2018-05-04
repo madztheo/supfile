@@ -1,0 +1,33 @@
+.main-container {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(88, 102, 124);
+  padding: 20px;
+  .user-info {
+    width: 100%;
+    i {
+      font-size: 60px;
+      display: block;
+      margin: auto;
+      color: white;
+      width: 50px;
+    }
+    p.username {
+      margin-top: 10px;
+      text-align: center;
+      color: white;
+      font-weight: lighter;
+      font-size: 22px;
+    }
+  }
+  .storage-chart {
+    margin-top: 50px;
+    p {
+      color: white;
+      font-weight: lighter;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+<div class="main-container">
+  <div class="user-info">
+    <i class="fas fa-user"></i>
+    <p class="username">{{ username }}</p>
+  </div>
+  <div class="storage-chart">
+    <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
+    <p>{{ storageUsed }}GB used out of {{ totalStorage }}GB</p>
+  </div>
+</div>

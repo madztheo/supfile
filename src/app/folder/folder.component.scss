@@ -1,0 +1,18 @@
+.main-container {
+  display: inline-block;
+  width: 100px;
+  margin: 10px;
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #868686;
+    font-size: 13px;
+    font-weight: lighter;
+    width: 90%;
+  }
+  i {
+    color: #cccccc;
+    font-size: 80px;
+  }
+}

@@ -1,0 +1,15 @@
+.main-container {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  .row {
+    height: 100%;
+    .left-pane {
+      height: 100%;
+    }
+    .folder-grid {
+      padding: 20px;
+    }
+  }
+}

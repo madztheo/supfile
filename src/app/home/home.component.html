@@ -1,0 +1,10 @@
+<div class="container main-container">
+  <div class="row">
+    <div class="col-3 left-pane">
+      <supfile-menu></supfile-menu>
+    </div>
+    <div class="col-9 folder-grid">
+      <supfile-folder *ngFor="let folder of folders" [folder]="folder"></supfile-folder>
+    </div>
+  </div>
+</div>
