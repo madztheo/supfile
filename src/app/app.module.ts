@@ -13,6 +13,7 @@ import { FolderComponent } from "./folder/folder.component";
 import { SignUpComponent } from "./signup/signup.component";
 import { LogInComponent } from "./login/login.component";
 import { NotFoundComponent } from "./notfound/notfound.component";
+import { ToolbarComponent } from "./toolbar/toolbar.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NotFoundComponent } from "./notfound/notfound.component";
     FolderComponent,
     LogInComponent,
     SignUpComponent,
+    ToolbarComponent,
     NotFoundComponent
   ],
   imports: [
