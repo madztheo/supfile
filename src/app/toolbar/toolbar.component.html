@@ -1,0 +1,9 @@
+<div class="main-container">
+  <button (click)="createNewFolder()">
+    <i class="far fa-folder-open"></i>
+  </button>
+  <button (click)="fileInput.click()">
+    <i class="fas fa-plus"></i>
+    <input type="file" #fileInput [hidden]="true" (change)="onFileChanged(fileInput.files)" />
+  </button>
+</div>
