@@ -1,10 +1,11 @@
 <div class="container main-container">
-  <div class="row">
+  <supfile-toolbar (onCreateNewFolder)="createFolder()"></supfile-toolbar>
+  <div class="row main-content">
     <div class="col-3 left-pane">
       <supfile-menu></supfile-menu>
     </div>
     <div class="col-9 folder-grid">
-      <supfile-folder *ngFor="let folder of folders" [folder]="folder"></supfile-folder>
+      <supfile-folder *ngFor="let folder of folders" (onRemove)="removeFolder(folder)" [folder]="folder"></supfile-folder>
     </div>
   </div>
 </div>
