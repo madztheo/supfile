@@ -1,4 +1,13 @@
-<div draggable="true" class="main-container">
+<div [@inOutFolderAnim]="folderState" (@inOutFolderAnim.done)="onHidingFolderDone()" draggable="true" (click)="hideContextMenu()"
+  class="main-container" (contextmenu)="onContextMenuShown($event)">
   <i class="fas fa-folder"></i>
-  <p>{{ folder.name }}</p>
+  <p *ngIf="!folder.isInEditMode">{{ folder.name }}</p>
+  <input *ngIf="folder.isInEditMode" type="text" [(ngModel)]="folder.name" class="form-control" placeholder="Name the folder"
+    (keyup.enter)="leaveEditMode()">
+  <div class="context-menu" *ngIf="isContextMenuVisible">
+    <ul>
+      <li (click)="removeFolder()">Remove</li>
+      <li (click)="editName()">Rename</li>
+    </ul>
+  </div>
 </div>
