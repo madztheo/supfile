@@ -14,6 +14,7 @@ import { SignUpComponent } from "./signup/signup.component";
 import { LogInComponent } from "./login/login.component";
 import { NotFoundComponent } from "./notfound/notfound.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule,
     AppRoutingModule,
     FormsModule,

@@ -6,16 +6,37 @@ import {
   ViewChild,
   ElementRef
 } from "@angular/core";
+import {
+  trigger,
+  state,
+  transition,
+  style,
+  animate
+} from "@angular/animations";
 
 @Component({
   selector: "supfile-folder",
   templateUrl: "./folder.component.html",
-  styleUrls: ["./folder.component.scss"]
+  styleUrls: ["./folder.component.scss"],
+  animations: [
+    trigger("inOutFolderAnim", [
+      state("in", style({ transform: "scale(1)" })),
+      transition("* => out", [
+        animate(
+          "600ms cubic-bezier(0.6, -0.28, 0.735, 0.045)",
+          style({
+            transform: "scale(0)"
+          })
+        )
+      ])
+    ])
+  ]
 })
 export class FolderComponent {
   @Input() folder: Folder;
   isContextMenuVisible = false;
   @Output() onRemove = new EventEmitter<Folder>();
+  folderState = "in";
 
   editName() {
     this.folder.isInEditMode = true;
@@ -35,6 +56,12 @@ export class FolderComponent {
   }
 
   removeFolder() {
-    this.onRemove.emit(this.folder);
+    this.folderState = "out";
+  }
+
+  onHidingFolderDone() {
+    if (this.folderState === "out") {
+      this.onRemove.emit(this.folder);
+    }
   }
 }
