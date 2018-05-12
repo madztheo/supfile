@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { APIService } from "../api/api.service";
 
 @Component({
   selector: "supfile-signup",
@@ -7,11 +8,34 @@ import { Router } from "@angular/router";
   styleUrls: ["./signup.component.scss"]
 })
 export class SignUpComponent {
-  constructor(private router: Router) {}
+  username: string;
+  password: string;
+  email: string;
+  confirmPassword: string;
+
+  constructor(private router: Router, private apiService: APIService) {}
+
+  signUp() {
+    if (
+      this.username &&
+      this.password &&
+      this.email &&
+      this.confirmPassword &&
+      this.password === this.confirmPassword
+    ) {
+      this.apiService
+        .signUp(this.email, this.username, this.password)
+        .then(() => {
+          this.router.navigate(["/"]);
+        });
+    } else {
+      alert("Please fill in all the fields");
+    }
+  }
 
   onSubmit(event: Event) {
     event.preventDefault();
-    this.router.navigate(["/"]);
+    this.signUp();
   }
 
   logIn() {

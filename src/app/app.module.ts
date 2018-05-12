@@ -15,6 +15,7 @@ import { LogInComponent } from "./login/login.component";
 import { NotFoundComponent } from "./notfound/notfound.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { APIService } from "./api/api.service";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     FormsModule,
     ChartModule
   ],
-  providers: [],
+  providers: [APIService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

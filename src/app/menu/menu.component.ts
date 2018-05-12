@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { APIService } from "../api/api.service";
 
 @Component({
   selector: "supfile-menu",
@@ -13,7 +14,7 @@ export class MenuComponent {
   storageUsed = 10;
   totalStorage = 30;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: APIService) {}
 
   setChartData() {
     this.chartData = {
@@ -41,9 +42,12 @@ export class MenuComponent {
   ngOnInit() {
     this.setChartData();
     this.setChartOptions();
+    this.username = this.apiService.getCurrentUser().getUsername();
   }
 
   signOut() {
-    this.router.navigate(["/login"]);
+    this.apiService.logOut().then(() => {
+      this.router.navigate(["/login"]);
+    });
   }
 }
