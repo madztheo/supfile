@@ -6,12 +6,12 @@ import { Component, Output, EventEmitter } from "@angular/core";
   styleUrls: ["./toolbar.component.scss"]
 })
 export class ToolbarComponent {
-  @Output() newFilesAdded = new EventEmitter<FileList>();
+  @Output() newFilesAdded = new EventEmitter<File>();
   @Output() onCreateNewFolder = new EventEmitter<any>();
 
   onFileChanged(files: FileList) {
     if (files.length > 0) {
-      this.newFilesAdded.emit(files);
+      this.newFilesAdded.emit(files[0]);
     }
   }
 

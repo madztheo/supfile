@@ -16,6 +16,7 @@ import { NotFoundComponent } from "./notfound/notfound.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APIService } from "./api/api.service";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { APIService } from "./api/api.service";
     RouterModule,
     AppRoutingModule,
     FormsModule,
-    ChartModule
+    ChartModule,
+    HttpClientModule
   ],
   providers: [APIService],
   bootstrap: [AppComponent]
