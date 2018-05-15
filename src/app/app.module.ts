@@ -17,6 +17,7 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APIService } from "./api/api.service";
 import { HttpClientModule } from "@angular/common/http";
+import { FileComponent } from "./file/file.component";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { HttpClientModule } from "@angular/common/http";
     HomeComponent,
     MenuComponent,
     FolderComponent,
+    FileComponent,
     LogInComponent,
     SignUpComponent,
     ToolbarComponent,

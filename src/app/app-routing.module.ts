@@ -6,8 +6,9 @@ import { SignUpComponent } from "./signup/signup.component";
 import { NotFoundComponent } from "./notfound/notfound.component";
 
 const routes: Routes = [
-  { path: "", redirectTo: "/dashboard", pathMatch: "full" },
-  { path: "dashboard", component: HomeComponent },
+  { path: "", redirectTo: "/my-drive", pathMatch: "full" },
+  { path: "my-drive", component: HomeComponent },
+  { path: "my-drive/folders/:id", component: HomeComponent },
   { path: "login", component: LogInComponent },
   { path: "signup", component: SignUpComponent },
   { path: "**", component: NotFoundComponent }

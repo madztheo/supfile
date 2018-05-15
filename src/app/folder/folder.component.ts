@@ -13,6 +13,8 @@ import {
   style,
   animate
 } from "@angular/animations";
+import { DBFolder } from "../api/db-classes";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "supfile-folder",
@@ -33,10 +35,12 @@ import {
   ]
 })
 export class FolderComponent {
-  @Input() folder: Folder;
+  @Input() folder: DBFolder;
   isContextMenuVisible = false;
-  @Output() onRemove = new EventEmitter<Folder>();
+  @Output() onRemove = new EventEmitter<DBFolder>();
   folderState = "in";
+
+  constructor(private router: Router) {}
 
   editName() {
     this.folder.isInEditMode = true;
@@ -51,8 +55,12 @@ export class FolderComponent {
     this.isContextMenuVisible = true;
   }
 
-  hideContextMenu() {
-    this.isContextMenuVisible = false;
+  onFolderClicked() {
+    if (this.isContextMenuVisible) {
+      this.isContextMenuVisible = false;
+      return;
+    }
+    this.router.navigate(["/my-drive/folders", this.folder.id]);
   }
 
   removeFolder() {

@@ -1,4 +1,4 @@
-<div [@inOutFolderAnim]="folderState" (@inOutFolderAnim.done)="onHidingFolderDone()" draggable="true" (click)="hideContextMenu()"
+<div [@inOutFolderAnim]="folderState" (@inOutFolderAnim.done)="onHidingFolderDone()" draggable="true" (click)="onFolderClicked()"
   class="main-container" (contextmenu)="onContextMenuShown($event)">
   <i class="fas fa-folder"></i>
   <p *ngIf="!folder.isInEditMode">{{ folder.name }}</p>

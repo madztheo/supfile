@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { APIService } from "../api/api.service";
 import { DBFile, DBFolder } from "../api/db-classes";
+import { ActivatedRoute, Router, ParamMap } from "@angular/router";
+import { switchMap } from "rxjs/operators";
 
 @Component({
   selector: "supfile-home",
@@ -8,52 +10,87 @@ import { DBFile, DBFolder } from "../api/db-classes";
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent {
-  folders = [
-    { id: "", name: "My folder", isInEditMode: false },
-    { id: "", name: "Another folder", isInEditMode: false },
-    { id: "", name: "Super folder", isInEditMode: false }
-  ];
+  currentFolder: DBFolder;
+  folders: DBFolder[];
   files: DBFile[];
+  inProgress = false;
 
-  constructor(private apiService: APIService) {}
+  constructor(
+    private apiService: APIService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   getFolders() {
-    this.apiService.getUsersFolders().then(folders => {
-      this.folders = folders.map(x => {
-        return {
-          id: x.id,
-          name: x.name,
-          isInEditMode: false
-        };
-      });
+    return this.apiService.getUsersFolders(this.currentFolder).then(folders => {
+      this.folders = folders;
     });
   }
 
   getFiles() {
-    this.apiService.getUsersFiles().then(files => {
+    return this.apiService.getUsersFiles(this.currentFolder).then(files => {
       this.files = files;
       console.log(files);
+      this.files;
     });
   }
 
   ngOnInit() {
-    this.getFolders();
-    this.getFiles();
+    if (this.route.routeConfig.path == "my-drive/folders/:id") {
+      this.route.paramMap
+        .pipe(
+          switchMap((params: ParamMap) => {
+            if (params.has("id")) {
+              const folderId = params.get("id");
+              return this.apiService.getFolder(folderId);
+            }
+            return null;
+          })
+        )
+        .subscribe(folder => {
+          this.currentFolder = folder;
+          this.getFolders();
+          this.getFiles();
+        });
+    } else {
+      this.getFolders();
+      this.getFiles();
+    }
   }
 
   createFolder() {
-    this.folders.push({ id: "", name: "New folder", isInEditMode: false });
     let folder = new DBFolder();
+    folder.name = prompt("Folder name");
+    folder.isInEditMode = false;
+    folder.user = this.apiService.getCurrentUser();
+    if (this.currentFolder) {
+      folder.parent = this.currentFolder;
+    }
+    this.folders.push(folder);
+    folder.save();
   }
 
-  removeFolder(folder: Folder) {
+  removeFolder(folder: DBFolder) {
     this.folders = this.folders.filter(x => x !== folder);
+    folder.destroy();
+  }
+
+  removeFile(file: DBFile) {
+    this.files = this.files.filter(x => x !== file);
+    file.destroy();
   }
 
   onFilesAdded(file: File) {
+    this.inProgress = true;
     if (!file) {
       return;
     }
-    this.apiService.uploadFile(file.name, file);
+    this.apiService
+      .uploadFile(file.name, file, this.currentFolder)
+      .then((dbFile: any) => {
+        console.log(dbFile);
+        this.files.push(dbFile);
+        this.inProgress = false;
+      });
   }
 }

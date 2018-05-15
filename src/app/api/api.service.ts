@@ -74,12 +74,24 @@ export class APIService {
     return Promise.resolve(query.find());
   }
 
-  getUsersFolders(): Promise<DBFolder[]> {
-    return this.makeQuery(DBFolder);
+  getUsersFolders(parentFolder?: DBFolder): Promise<DBFolder[]> {
+    let query = new Parse.Query(DBFolder);
+    //if (parentFolder) {
+    query.equalTo("parent", parentFolder);
+    //}
+    return Promise.resolve(query.find());
   }
 
-  getUsersFiles(): Promise<DBFile[]> {
-    return this.makeQuery(DBFile);
+  getUsersFiles(folder?: DBFolder): Promise<DBFile[]> {
+    let query = new Parse.Query(DBFile);
+    //if (folder) {
+    query.equalTo("folder", folder);
+    //}
+    return Promise.resolve(query.find());
+  }
+
+  getFolder(id: string): Promise<DBFolder> {
+    return Promise.resolve(new Parse.Query(DBFolder).get(id));
   }
 
   private getUploadUrl(fileName: string) {
@@ -88,27 +100,30 @@ export class APIService {
     });
   }
 
-  uploadFile(fileName: string, file: File, folder?: DBFolder) {
-    return this.getUploadUrl(fileName).then(res => {
-      const url = res.url;
-      return this.http.put(url, file).subscribe(() => {
-        const currentUser = this.getCurrentUser();
-        let dbFile = new Parse.Object("File");
-        dbFile.set("name", fileName);
-        dbFile.set("user", currentUser);
-        if (folder) {
-          dbFile.set("folder", folder);
-        }
-        dbFile.setACL(new Parse.ACL(currentUser));
-        dbFile.save().then(() => console.log("File saved to db"));
-      });
-    });
+  uploadFile(fileName: string, file: File, folder?: DBFolder): Promise<DBFile> {
+    return Promise.resolve(
+      this.getUploadUrl(fileName).then(res => {
+        const url = res.url;
+        return <any>this.http
+          .put(url, file)
+          .toPromise()
+          .then(() => {
+            const currentUser = this.getCurrentUser();
+            let dbFile = new DBFile();
+            dbFile.name = fileName;
+            dbFile.user = currentUser;
+            if (folder) {
+              dbFile.folder = folder;
+            }
+            return dbFile.save();
+          });
+      })
+    );
   }
 
   getFileUrl(file: DBFile) {
-    console.log(file);
     return Parse.Cloud.run("getFileUrl", {
-      fileName: file.name
+      fileName: file.fileName
     });
   }
 }
