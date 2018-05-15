@@ -15,6 +15,7 @@ import {
 } from "@angular/animations";
 import { DBFolder, DBFile } from "../api/db-classes";
 import { APIService } from "../api/api.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "supfile-file",
@@ -40,7 +41,7 @@ export class FileComponent {
   @Output() onRemove = new EventEmitter<DBFile>();
   fileState = "in";
 
-  constructor(private apiService: APIService) {}
+  constructor(private apiService: APIService, private router: Router) {}
 
   editName() {
     this.file.isInEditMode = true;
@@ -64,9 +65,10 @@ export class FileComponent {
     if (this.file.isInEditMode) {
       return;
     }
-    this.apiService.getFileUrl(this.file).then(({ url }) => {
+    this.router.navigate(["/my-drive/files", this.file.id]);
+    /*this.apiService.getFileUrl(this.file).then(({ url }) => {
       window.open(url);
-    });
+    });*/
   }
 
   removeFile() {

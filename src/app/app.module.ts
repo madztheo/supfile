@@ -18,6 +18,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APIService } from "./api/api.service";
 import { HttpClientModule } from "@angular/common/http";
 import { FileComponent } from "./file/file.component";
+import { FileViewerComponent } from "./file-viewer/file-viewer.component";
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FileComponent } from "./file/file.component";
     MenuComponent,
     FolderComponent,
     FileComponent,
+    FileViewerComponent,
     LogInComponent,
     SignUpComponent,
     ToolbarComponent,

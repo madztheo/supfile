@@ -1,0 +1,6 @@
+<video *ngIf="fileType === 'video' && fileContent" [src]="fileContent" controls autoplay></video>
+<img *ngIf="fileType === 'image' && fileContent" [src]="fileContent" />
+<p *ngIf="fileType === 'text' && fileContent">{{ fileContent }}</p>
+<h1 *ngIf="fileType === 'other'">
+  Downloading file...
+</h1>

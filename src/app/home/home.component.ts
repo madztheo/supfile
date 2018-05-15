@@ -85,12 +85,10 @@ export class HomeComponent {
     if (!file) {
       return;
     }
-    this.apiService
-      .uploadFile(file.name, file, this.currentFolder)
-      .then((dbFile: any) => {
-        console.log(dbFile);
-        this.files.push(dbFile);
-        this.inProgress = false;
-      });
+    this.apiService.uploadFile(file, this.currentFolder).then((dbFile: any) => {
+      console.log(dbFile);
+      this.files.push(dbFile);
+      this.inProgress = false;
+    });
   }
 }

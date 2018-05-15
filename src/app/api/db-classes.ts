@@ -64,6 +64,13 @@ export class DBFile extends MainDBFolder {
     this.set("folder", value);
   }
 
+  get type() {
+    return this.get("type");
+  }
+  set type(value: string) {
+    this.set("type", value);
+  }
+
   isInEditMode: boolean;
 
   constructor() {

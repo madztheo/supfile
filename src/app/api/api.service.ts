@@ -94,15 +94,19 @@ export class APIService {
     return Promise.resolve(new Parse.Query(DBFolder).get(id));
   }
 
+  getDBFile(id: string): Promise<DBFile> {
+    return Promise.resolve(new Parse.Query(DBFile).get(id));
+  }
+
   private getUploadUrl(fileName: string) {
     return Parse.Cloud.run("getUploadUrl", {
       fileName
     });
   }
 
-  uploadFile(fileName: string, file: File, folder?: DBFolder): Promise<DBFile> {
+  uploadFile(file: File, folder?: DBFolder): Promise<DBFile> {
     return Promise.resolve(
-      this.getUploadUrl(fileName).then(res => {
+      this.getUploadUrl(file.name).then(res => {
         const url = res.url;
         return <any>this.http
           .put(url, file)
@@ -110,7 +114,8 @@ export class APIService {
           .then(() => {
             const currentUser = this.getCurrentUser();
             let dbFile = new DBFile();
-            dbFile.name = fileName;
+            dbFile.name = file.name;
+            dbFile.type = file.type;
             dbFile.user = currentUser;
             if (folder) {
               dbFile.folder = folder;
@@ -125,5 +130,16 @@ export class APIService {
     return Parse.Cloud.run("getFileUrl", {
       fileName: file.fileName
     });
+  }
+
+  getFile(file: DBFile) {
+    return this.http.post(
+      `${this.serverUrl}/files/download`,
+      {
+        fileName: file.fileName,
+        sessionToken: this.getCurrentUser().getSessionToken()
+      },
+      { responseType: "blob" }
+    );
   }
 }
