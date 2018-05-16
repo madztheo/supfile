@@ -17,6 +17,7 @@ import { DBFolder, DBFile } from "../api/db-classes";
 import { APIService } from "../api/api.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { switchMap } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "supfile-file-viewer",
@@ -24,43 +25,67 @@ import { switchMap } from "rxjs/operators";
   styleUrls: ["./file-viewer.component.scss"]
 })
 export class FileViewerComponent {
-  @Input() rawFile: Blob;
+  fileUrl: any;
   fileContent: any;
   @Input() file: DBFile;
   @Output() onRemove = new EventEmitter<DBFile>();
-  fileType: "video" | "image" | "text" | "other";
+  fileType: "video" | "image" | "text" | "audio" | "other";
 
-  constructor(private apiService: APIService, private route: ActivatedRoute) {}
+  constructor(
+    private apiService: APIService,
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) {}
 
   getRawFile() {
     this.apiService.getFile(this.file).subscribe(rawFile => {
-      this.rawFile = rawFile;
-      this.getFileType();
+      console.log(rawFile);
+      this.fileUrl = rawFile;
+      this.fileType = this.getType(rawFile.type);
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.fileContent = e.target.result;
       };
       if (this.fileType !== "text" && this.fileType !== "other") {
-        reader.readAsDataURL(this.rawFile);
+        reader.readAsDataURL(this.fileUrl);
       } else if (this.fileType !== "other") {
-        reader.readAsText(this.rawFile);
+        reader.readAsText(this.fileUrl);
       } else {
         //We let the browser take care of it for files we can't support
-        const link = window.URL.createObjectURL(this.rawFile);
+        const link = window.URL.createObjectURL(this.fileUrl);
         window.open(link);
       }
     });
   }
 
-  getFileType() {
-    if (this.rawFile.type.startsWith("image")) {
-      this.fileType = "image";
-    } else if (this.rawFile.type.startsWith("video")) {
-      this.fileType = "video";
-    } else if (this.rawFile.type.startsWith("text")) {
-      this.fileType = "text";
+  getFileUrl() {
+    this.apiService.getFileUrl(this.file).then(({ url }) => {
+      this.fileType = this.getType(this.file.type);
+      this.fileUrl = url;
+      if (this.fileType === "other") {
+        window.open(this.fileUrl);
+      } else if (this.fileType === "text") {
+        this.http
+          .get(this.fileUrl, { responseType: "text" })
+          .subscribe(text => {
+            this.fileContent = text;
+          });
+      }
+    });
+  }
+
+  getType(mimeType: string) {
+    console.log(mimeType);
+    if (mimeType.startsWith("image")) {
+      return "image";
+    } else if (mimeType.startsWith("video")) {
+      return "video";
+    } else if (mimeType.startsWith("audio")) {
+      return "audio";
+    } else if (mimeType.startsWith("text")) {
+      return "text";
     } else {
-      this.fileType = "other";
+      return "other";
     }
   }
 
@@ -78,7 +103,7 @@ export class FileViewerComponent {
         )
         .subscribe(file => {
           this.file = file;
-          this.getRawFile();
+          this.getFileUrl();
         });
     }
   }

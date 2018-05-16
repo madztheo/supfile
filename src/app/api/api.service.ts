@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import * as Parse from "parse";
 import { HttpClient } from "@angular/common/http";
 import { DBFile, DBFolder } from "./db-classes";
+import * as fileType from "file-type";
 
 @Injectable()
 export class APIService {
@@ -120,7 +121,19 @@ export class APIService {
             if (folder) {
               dbFile.folder = folder;
             }
-            return dbFile.save();
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = (e: any) => {
+                const type = fileType(e.target.result);
+                if (type) {
+                  dbFile.type = type.mime;
+                } else {
+                  dbFile.type = file.type;
+                }
+                resolve(dbFile.save());
+              };
+              reader.readAsArrayBuffer(file);
+            });
           });
       })
     );
