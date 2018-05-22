@@ -6,8 +6,9 @@
     (keyup.enter)="leaveEditMode()">
   <div class="context-menu" *ngIf="isContextMenuVisible">
     <ul>
-      <li (click)="removeFolder()">Remove</li>
+      <li (click)="download()">Download</li>
       <li (click)="editName()">Rename</li>
+      <li (click)="removeFolder()">Remove</li>
     </ul>
   </div>
 </div>

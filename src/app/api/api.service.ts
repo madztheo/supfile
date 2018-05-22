@@ -155,4 +155,15 @@ export class APIService {
       { responseType: "blob" }
     );
   }
+
+  downloadFolder(folder: DBFolder) {
+    return this.http.post(
+      `${this.serverUrl}/folders/download`,
+      {
+        folderId: folder.id,
+        sessionToken: this.getCurrentUser().getSessionToken()
+      },
+      { responseType: "blob" }
+    );
+  }
 }

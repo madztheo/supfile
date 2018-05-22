@@ -15,6 +15,7 @@ import {
 } from "@angular/animations";
 import { DBFolder } from "../api/db-classes";
 import { Router } from "@angular/router";
+import { APIService } from "../api/api.service";
 
 @Component({
   selector: "supfile-folder",
@@ -40,7 +41,7 @@ export class FolderComponent {
   @Output() onRemove = new EventEmitter<DBFolder>();
   folderState = "in";
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: APIService) {}
 
   editName() {
     this.folder.isInEditMode = true;
@@ -71,5 +72,12 @@ export class FolderComponent {
     if (this.folderState === "out") {
       this.onRemove.emit(this.folder);
     }
+  }
+
+  download() {
+    this.apiService.downloadFolder(this.folder).subscribe(res => {
+      const zipLink = window.URL.createObjectURL(res);
+      window.open(zipLink);
+    });
   }
 }
