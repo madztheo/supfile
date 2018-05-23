@@ -40,8 +40,24 @@ export class FolderComponent {
   isContextMenuVisible = false;
   @Output() onRemove = new EventEmitter<DBFolder>();
   folderState = "in";
+  publicLink: string;
+  get isPublic() {
+    if (this.folder) {
+      return this.folder.getACL().getPublicReadAccess();
+    } else {
+      return false;
+    }
+  }
 
   constructor(private router: Router, private apiService: APIService) {}
+
+  ngOnInit() {
+    if (this.folder) {
+      this.publicLink = `${this.apiService.webAppUrl}/public/folders/${
+        this.folder.id
+      }`;
+    }
+  }
 
   editName() {
     this.folder.isInEditMode = true;
@@ -79,5 +95,30 @@ export class FolderComponent {
       const zipLink = window.URL.createObjectURL(res);
       window.open(zipLink);
     });
+  }
+
+  shareFolder() {
+    this.apiService.shareFolder(this.folder).then(folder => {
+      this.folder = folder;
+      console.log(folder);
+    });
+  }
+
+  stopSharingFolder() {
+    this.apiService.stopSharingFolder(this.folder).then(folder => {
+      this.folder = folder;
+      console.log(folder);
+    });
+  }
+
+  copyPublicLink() {
+    /*(<HTMLInputElement>this.linkInput.nativeElement).select();
+    if (document.execCommand("copy")) {
+      alert(
+        "Link copied in clipboard : " +
+          (<HTMLInputElement>this.linkInput.nativeElement).value
+      );
+    }*/
+    prompt("Share link", this.publicLink);
   }
 }

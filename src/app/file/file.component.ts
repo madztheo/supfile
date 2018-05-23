@@ -39,9 +39,27 @@ export class FileComponent {
   @Input() file: DBFile;
   isContextMenuVisible = false;
   @Output() onRemove = new EventEmitter<DBFile>();
+  @ViewChild("publicLinkInput") linkInput: ElementRef;
   fileState = "in";
+  publicLink: string;
+
+  get isPublic() {
+    if (this.file) {
+      return this.file.getACL().getPublicReadAccess();
+    } else {
+      return false;
+    }
+  }
 
   constructor(private apiService: APIService, private router: Router) {}
+
+  ngOnInit() {
+    if (this.file) {
+      this.publicLink = `${this.apiService.webAppUrl}/public/files/${
+        this.file.id
+      }`;
+    }
+  }
 
   editName() {
     this.file.isInEditMode = true;
@@ -79,5 +97,30 @@ export class FileComponent {
     if (this.fileState === "out") {
       this.onRemove.emit(this.file);
     }
+  }
+
+  shareFile() {
+    this.apiService.shareFile(this.file).then(file => {
+      this.file = file;
+      console.log(file);
+    });
+  }
+
+  stopSharingFile() {
+    this.apiService.stopSharingFile(this.file).then(file => {
+      this.file = file;
+      console.log(file);
+    });
+  }
+
+  copyPublicLink() {
+    /*(<HTMLInputElement>this.linkInput.nativeElement).select();
+    if (document.execCommand("copy")) {
+      alert(
+        "Link copied in clipboard : " +
+          (<HTMLInputElement>this.linkInput.nativeElement).value
+      );
+    }*/
+    prompt("Share link", this.publicLink);
   }
 }

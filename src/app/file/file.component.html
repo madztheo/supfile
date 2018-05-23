@@ -5,8 +5,13 @@
   <input *ngIf="file.isInEditMode" type="text" [(ngModel)]="file.name" class="form-control" placeholder="Name the file" (keyup.enter)="leaveEditMode()">
   <div class="context-menu" *ngIf="isContextMenuVisible">
     <ul>
+      <li *ngIf="isPublic" (click)="copyPublicLink()">Copy public link</li>
+      <li (click)="isPublic ? stopSharingFile() : shareFile()">
+        {{ isPublic ? 'Make private' : 'Share publicly' }}
+      </li>
       <li (click)="removeFile()">Remove</li>
       <li (click)="editName()">Rename</li>
     </ul>
   </div>
+  <input #publicLinkInput id="publicLinkInput" type="text" style="display: none;" [(ngModel)]="publicLink" />
 </div>

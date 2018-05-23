@@ -8,6 +8,7 @@ import * as fileType from "file-type";
 export class APIService {
   private serverUrl = "http://localhost:1337";
   private serverPublicKey = "r2iHRgNfOM8lih4";
+  public webAppUrl = "http://localhost:4200";
 
   constructor(private http: HttpClient) {}
 
@@ -77,17 +78,29 @@ export class APIService {
 
   getUsersFolders(parentFolder?: DBFolder): Promise<DBFolder[]> {
     let query = new Parse.Query(DBFolder);
-    //if (parentFolder) {
+    query.equalTo("user", this.getCurrentUser());
     query.equalTo("parent", parentFolder);
-    //}
+    return Promise.resolve(query.find());
+  }
+
+  getPublicFolders(parentFolder?: DBFolder): Promise<DBFolder[]> {
+    let query = new Parse.Query(DBFolder);
+    query.notEqualTo("user", this.getCurrentUser());
+    query.equalTo("parent", parentFolder);
     return Promise.resolve(query.find());
   }
 
   getUsersFiles(folder?: DBFolder): Promise<DBFile[]> {
     let query = new Parse.Query(DBFile);
-    //if (folder) {
+    query.equalTo("user", this.getCurrentUser());
     query.equalTo("folder", folder);
-    //}
+    return Promise.resolve(query.find());
+  }
+
+  getPublicFiles(folder?: DBFolder): Promise<DBFile[]> {
+    let query = new Parse.Query(DBFile);
+    query.notEqualTo("user", this.getCurrentUser());
+    query.equalTo("folder", folder);
     return Promise.resolve(query.find());
   }
 
@@ -142,6 +155,36 @@ export class APIService {
   getFileUrl(file: DBFile) {
     return Parse.Cloud.run("getFileUrl", {
       fileName: file.fileName
+    });
+  }
+
+  getPublicFileUrl(file: DBFile) {
+    return Parse.Cloud.run("getPublicFileUrl", {
+      fileId: file.id
+    });
+  }
+
+  shareFile(file: DBFile) {
+    return Parse.Cloud.run("shareFile", {
+      fileId: file.id
+    });
+  }
+
+  stopSharingFile(file: DBFile) {
+    return Parse.Cloud.run("stopSharingFile", {
+      fileId: file.id
+    });
+  }
+
+  shareFolder(folder: DBFolder) {
+    return Parse.Cloud.run("shareFolder", {
+      folderId: folder.id
+    });
+  }
+
+  stopSharingFolder(folder: DBFolder) {
+    return Parse.Cloud.run("stopSharingFolder", {
+      folderId: folder.id
     });
   }
 

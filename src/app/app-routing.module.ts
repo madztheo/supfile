@@ -10,7 +10,9 @@ const routes: Routes = [
   { path: "", redirectTo: "/my-drive", pathMatch: "full" },
   { path: "my-drive", component: HomeComponent },
   { path: "my-drive/folders/:id", component: HomeComponent },
+  { path: "public/folders/:id", component: HomeComponent },
   { path: "my-drive/files/:id", component: FileViewerComponent },
+  { path: "public/files/:id", component: FileViewerComponent },
   { path: "login", component: LogInComponent },
   { path: "signup", component: SignUpComponent },
   { path: "**", component: NotFoundComponent }

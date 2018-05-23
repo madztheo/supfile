@@ -6,6 +6,10 @@
     (keyup.enter)="leaveEditMode()">
   <div class="context-menu" *ngIf="isContextMenuVisible">
     <ul>
+      <li *ngIf="isPublic" (click)="copyPublicLink()">Copy public link</li>
+      <li (click)="isPublic ? stopSharingFolder() : shareFolder()">
+        {{ isPublic ? 'Make private' : 'Share publicly' }}
+      </li>
       <li (click)="download()">Download</li>
       <li (click)="editName()">Rename</li>
       <li (click)="removeFolder()">Remove</li>

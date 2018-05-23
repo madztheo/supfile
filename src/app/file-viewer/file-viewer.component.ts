@@ -58,19 +58,27 @@ export class FileViewerComponent {
     });
   }
 
+  setUrl(url: string) {
+    this.fileType = this.getType(this.file.type);
+    this.fileUrl = url;
+    if (this.fileType === "other") {
+      window.open(this.fileUrl);
+    } else if (this.fileType === "text") {
+      this.http.get(this.fileUrl, { responseType: "text" }).subscribe(text => {
+        this.fileContent = text;
+      });
+    }
+  }
+
+  getPublicFileUrl() {
+    this.apiService.getPublicFileUrl(this.file).then(({ url }) => {
+      this.setUrl(url);
+    });
+  }
+
   getFileUrl() {
     this.apiService.getFileUrl(this.file).then(({ url }) => {
-      this.fileType = this.getType(this.file.type);
-      this.fileUrl = url;
-      if (this.fileType === "other") {
-        window.open(this.fileUrl);
-      } else if (this.fileType === "text") {
-        this.http
-          .get(this.fileUrl, { responseType: "text" })
-          .subscribe(text => {
-            this.fileContent = text;
-          });
-      }
+      this.setUrl(url);
     });
   }
 
@@ -90,7 +98,10 @@ export class FileViewerComponent {
   }
 
   ngOnInit() {
-    if (this.route.routeConfig.path == "my-drive/files/:id") {
+    if (
+      this.route.routeConfig.path == "my-drive/files/:id" ||
+      this.route.routeConfig.path == "public/files/:id"
+    ) {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) => {
@@ -103,7 +114,11 @@ export class FileViewerComponent {
         )
         .subscribe(file => {
           this.file = file;
-          this.getFileUrl();
+          if (this.file.user.id !== this.apiService.getCurrentUser().id) {
+            this.getPublicFileUrl();
+          } else {
+            this.getFileUrl();
+          }
         });
     }
   }

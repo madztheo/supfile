@@ -22,21 +22,40 @@ export class HomeComponent {
   ) {}
 
   getFolders() {
-    return this.apiService.getUsersFolders(this.currentFolder).then(folders => {
-      this.folders = folders;
-    });
+    if (this.route.routeConfig.path === "public/folders/:id") {
+      return this.apiService
+        .getPublicFolders(this.currentFolder)
+        .then(folders => {
+          this.folders = folders;
+        });
+    } else {
+      return this.apiService
+        .getUsersFolders(this.currentFolder)
+        .then(folders => {
+          this.folders = folders;
+        });
+    }
   }
 
   getFiles() {
-    return this.apiService.getUsersFiles(this.currentFolder).then(files => {
-      this.files = files;
-      console.log(files);
-      this.files;
-    });
+    if (this.route.routeConfig.path === "public/folders/:id") {
+      return this.apiService.getPublicFiles(this.currentFolder).then(files => {
+        this.files = files;
+        console.log(files);
+      });
+    } else {
+      return this.apiService.getUsersFiles(this.currentFolder).then(files => {
+        this.files = files;
+        console.log(files);
+      });
+    }
   }
 
   ngOnInit() {
-    if (this.route.routeConfig.path == "my-drive/folders/:id") {
+    if (
+      this.route.routeConfig.path === "my-drive/folders/:id" ||
+      this.route.routeConfig.path === "public/folders/:id"
+    ) {
       this.route.paramMap
         .pipe(
           switchMap((params: ParamMap) => {
