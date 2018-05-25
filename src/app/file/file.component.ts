@@ -123,4 +123,8 @@ export class FileComponent {
     }*/
     prompt("Share link", this.publicLink);
   }
+
+  onDrag(ev) {
+    ev.dataTransfer.setData("fileId", this.file.id);
+  }
 }

@@ -1,5 +1,5 @@
 <div [@inOutFileAnim]="fileState" (@inOutFileAnim.done)="onHidingFileDone()" draggable="true" (click)="onFileClicked()" class="main-container"
-  (contextmenu)="onContextMenuShown($event)">
+  (dragstart)="onDrag($event)" (contextmenu)="onContextMenuShown($event)">
   <i class="fas fa-file"></i>
   <p *ngIf="!file.isInEditMode">{{ file.name }}</p>
   <input *ngIf="file.isInEditMode" type="text" [(ngModel)]="file.name" class="form-control" placeholder="Name the file" (keyup.enter)="leaveEditMode()">

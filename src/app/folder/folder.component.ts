@@ -13,7 +13,7 @@ import {
   style,
   animate
 } from "@angular/animations";
-import { DBFolder } from "../api/db-classes";
+import { DBFolder, DBFile } from "../api/db-classes";
 import { Router } from "@angular/router";
 import { APIService } from "../api/api.service";
 
@@ -39,6 +39,8 @@ export class FolderComponent {
   @Input() folder: DBFolder;
   isContextMenuVisible = false;
   @Output() onRemove = new EventEmitter<DBFolder>();
+  @Output() fileDropped = new EventEmitter<DBFile>();
+  @Output() folderDropped = new EventEmitter<DBFolder>();
   folderState = "in";
   publicLink: string;
   get isPublic() {
@@ -120,5 +122,34 @@ export class FolderComponent {
       );
     }*/
     prompt("Share link", this.publicLink);
+  }
+
+  allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  onDrag(ev) {
+    ev.dataTransfer.setData("folderId", this.folder.id);
+  }
+
+  onDrop(ev) {
+    ev.preventDefault();
+    const fileId = ev.dataTransfer.getData("fileId");
+    const folderId = ev.dataTransfer.getData("folderId");
+    if (fileId) {
+      this.apiService.getDBFile(fileId).then(file => {
+        file.folder = this.folder;
+        file.save();
+        this.fileDropped.emit(file);
+      });
+    } else if (folderId) {
+      this.apiService.getFolder(folderId).then(folder => {
+        if (folder.id !== this.folder.id) {
+          folder.parent = this.folder;
+          folder.save();
+          this.folderDropped.emit(folder);
+        }
+      });
+    }
   }
 }

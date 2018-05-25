@@ -1,5 +1,6 @@
 <div [@inOutFolderAnim]="folderState" (@inOutFolderAnim.done)="onHidingFolderDone()" draggable="true" (click)="onFolderClicked()"
-  class="main-container" (contextmenu)="onContextMenuShown($event)">
+  class="main-container" (contextmenu)="onContextMenuShown($event)" (dragstart)="onDrag($event)" draggable="true" (drop)="onDrop($event)"
+  (dragover)="allowDrop($event)">
   <i class="fas fa-folder"></i>
   <p *ngIf="!folder.isInEditMode">{{ folder.name }}</p>
   <input *ngIf="folder.isInEditMode" type="text" [(ngModel)]="folder.name" class="form-control" placeholder="Name the folder"

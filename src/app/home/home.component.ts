@@ -110,4 +110,16 @@ export class HomeComponent {
       this.inProgress = false;
     });
   }
+
+  onFileMoved(file: DBFile) {
+    if (file.folder.id !== this.currentFolder.id) {
+      this.files = this.files.filter(x => x.id !== file.id);
+    }
+  }
+
+  onFolderMoved(folder: DBFolder) {
+    if (folder.parent.id !== this.currentFolder.id) {
+      this.folders = this.folders.filter(x => x.id !== folder.id);
+    }
+  }
 }

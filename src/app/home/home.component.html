@@ -5,7 +5,8 @@
       <supfile-menu></supfile-menu>
     </div>
     <div class="col-9 folder-grid">
-      <supfile-folder *ngFor="let folder of folders" (onRemove)="removeFolder(folder)" [folder]="folder"></supfile-folder>
+      <supfile-folder *ngFor="let folder of folders" (fileDropped)="onFileMoved($event)" (folderDropped)="onFolderMoved($event)"
+        (onRemove)="removeFolder(folder)" [folder]="folder"></supfile-folder>
       <supfile-file *ngFor="let file of files" (onRemove)="removeFile(file)" [file]="file"></supfile-file>
 
     </div>
