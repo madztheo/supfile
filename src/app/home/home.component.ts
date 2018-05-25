@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { APIService } from "../api/api.service";
 import { DBFile, DBFolder } from "../api/db-classes";
 import { ActivatedRoute, Router, ParamMap } from "@angular/router";
 import { switchMap } from "rxjs/operators";
+import { ToolbarComponent } from "../toolbar/toolbar.component";
 
 @Component({
   selector: "supfile-home",
@@ -14,6 +15,7 @@ export class HomeComponent {
   folders: DBFolder[];
   files: DBFile[];
   inProgress = false;
+  @ViewChild(ToolbarComponent) toolbar: ToolbarComponent;
 
   constructor(
     private apiService: APIService,
@@ -68,10 +70,12 @@ export class HomeComponent {
         )
         .subscribe(folder => {
           this.currentFolder = folder;
+          this.toolbar.setFolderTree(this.currentFolder);
           this.getFolders();
           this.getFiles();
         });
     } else {
+      this.toolbar.setFolderTree();
       this.getFolders();
       this.getFiles();
     }
@@ -112,14 +116,10 @@ export class HomeComponent {
   }
 
   onFileMoved(file: DBFile) {
-    if (file.folder.id !== this.currentFolder.id) {
-      this.files = this.files.filter(x => x.id !== file.id);
-    }
+    this.files = this.files.filter(x => x.id !== file.id);
   }
 
   onFolderMoved(folder: DBFolder) {
-    if (folder.parent.id !== this.currentFolder.id) {
-      this.folders = this.folders.filter(x => x.id !== folder.id);
-    }
+    this.folders = this.folders.filter(x => x.id !== folder.id);
   }
 }

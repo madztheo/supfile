@@ -1,9 +1,23 @@
 <div class="main-container">
-  <button (click)="createNewFolder()">
-    <i class="far fa-folder-open"></i>
-  </button>
-  <button (click)="fileInput.click()">
-    <i class="fas fa-plus"></i>
-    <input type="file" #fileInput [hidden]="true" (change)="onFileChanged(fileInput.files)" />
-  </button>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" *ngIf="folderTreeLoaded">
+      <li class="breadcrumb-item" (drop)="onDrop($event)" (dragover)="allowDrop($event)">
+        <a *ngIf="folderTree.length > 0" href="./my-drive/">Home</a>
+        <span *ngIf="folderTree.length === 0">Home</span>
+      </li>
+      <li class="breadcrumb-item" *ngFor="let folder of folderTree; let i = index;" (drop)="onDrop($event, folder)" (dragover)="allowDrop($event)">
+        <a *ngIf="i < folderTree.length - 1" href="./my-drive/folders/{{ folder.id }}">{{ folder.name }}</a>
+        <span *ngIf="i === folderTree.length - 1">{{ folder.name }}</span>
+      </li>
+    </ol>
+  </nav>
+  <div class="actions">
+    <button (click)="fileInput.click()" data-toggle="tooltip" data-placement="bottom" title="Upload a file">
+      <i class="fas fa-plus"></i>
+      <input type="file" #fileInput [hidden]="true" (change)="onFileChanged(fileInput.files)" />
+    </button>
+    <button (click)="createNewFolder()" data-toggle="tooltip" data-placement="bottom" title="Create a new folder">
+      <i class="far fa-folder-open"></i>
+    </button>
+  </div>
 </div>
