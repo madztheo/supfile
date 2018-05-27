@@ -50,10 +50,6 @@ export class FileViewerComponent {
         reader.readAsDataURL(this.fileUrl);
       } else if (this.fileType !== "other") {
         reader.readAsText(this.fileUrl);
-      } else {
-        //We let the browser take care of it for files we can't support
-        const link = window.URL.createObjectURL(this.fileUrl);
-        window.open(link);
       }
     });
   }
@@ -61,9 +57,7 @@ export class FileViewerComponent {
   setUrl(url: string) {
     this.fileType = this.getType(this.file.type);
     this.fileUrl = url;
-    if (this.fileType === "other") {
-      window.open(this.fileUrl);
-    } else if (this.fileType === "text") {
+    if (this.fileType === "text") {
       this.http.get(this.fileUrl, { responseType: "text" }).subscribe(text => {
         this.fileContent = text;
       });
@@ -121,5 +115,13 @@ export class FileViewerComponent {
           }
         });
     }
+  }
+
+  openFile() {
+    window.open(this.fileUrl);
+  }
+
+  download() {
+    this.openFile();
   }
 }

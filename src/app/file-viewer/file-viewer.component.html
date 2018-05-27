@@ -1,7 +1,20 @@
-<video *ngIf="fileType === 'video' && fileUrl" [src]="fileUrl" controls autoplay></video>
-<audio *ngIf="fileType === 'audio' && fileUrl" [src]="fileUrl" controls autoplay></audio>
-<img *ngIf="fileType === 'image' && fileUrl" [src]="fileUrl" />
-<p *ngIf="fileType === 'text' && fileUrl">{{ fileContent }}</p>
-<h1 *ngIf="fileType === 'other'">
-  Downloading file...
-</h1>
+<div class="main-container">
+  <div class="title-bar">
+    <h1>{{ file?.name }}</h1>
+    <div class="actions">
+      <button (click)="download()" data-toggle="tooltip" data-placement="bottom" title="Download file">
+        <i class="fas fa-download"></i>
+      </button>
+    </div>
+  </div>
+  <div class="viewer">
+    <video *ngIf="fileType === 'video' && fileUrl" [src]="fileUrl" controls autoplay></video>
+    <audio *ngIf="fileType === 'audio' && fileUrl" [src]="fileUrl" controls autoplay></audio>
+    <img *ngIf="fileType === 'image' && fileUrl" [src]="fileUrl" />
+    <p *ngIf="fileType === 'text' && fileUrl">{{ fileContent }}</p>
+    <div *ngIf="fileType === 'other'" class="open-file" (click)="openFile()">
+      <i class="fas fa-box-open"></i>
+      <p>Open file</p>
+    </div>
+  </div>
+</div>
