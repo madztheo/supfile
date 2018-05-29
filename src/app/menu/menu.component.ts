@@ -11,8 +11,8 @@ export class MenuComponent {
   username = "John Doe";
   chartData: any;
   chartOptions: any;
-  storageUsed = 10;
-  totalStorage = 30;
+  storageUsed = 0;
+  totalStorage = 0;
 
   constructor(private router: Router, private apiService: APIService) {}
 
@@ -39,10 +39,42 @@ export class MenuComponent {
     };
   }
 
+  getFormattedSize(size: number) {
+    if (size < Math.pow(10, 3)) {
+      return size;
+    } else if (size < Math.pow(10, 6)) {
+      return size / Math.pow(10, 3);
+    } else if (size < Math.pow(10, 9)) {
+      return size / Math.pow(10, 6);
+    } else {
+      return size / Math.pow(10, 9);
+    }
+  }
+
+  getStorageSuffix(size: number) {
+    if (size < Math.pow(10, 3)) {
+      return "B";
+    } else if (size < Math.pow(10, 6)) {
+      return "KB";
+    } else if (size < Math.pow(10, 9)) {
+      return "MB";
+    } else {
+      return "GB";
+    }
+  }
+
+  refreshStorageInfo() {
+    this.apiService.getStorageInfo().then(storageInfo => {
+      this.storageUsed = storageInfo.used;
+      this.totalStorage = storageInfo.allowed;
+      this.setChartData();
+    });
+  }
+
   ngOnInit() {
-    this.setChartData();
     this.setChartOptions();
     this.username = this.apiService.getCurrentUser().getUsername();
+    this.refreshStorageInfo();
   }
 
   signOut() {

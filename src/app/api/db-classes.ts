@@ -1,6 +1,6 @@
 import * as Parse from "parse";
 
-export class MainDBFolder extends Parse.Object {
+export class MainDBItem extends Parse.Object {
   get user() {
     return this.get("user");
   }
@@ -18,7 +18,7 @@ export class MainDBFolder extends Parse.Object {
   }
 }
 
-export class DBFolder extends MainDBFolder {
+export class DBFolder extends MainDBItem {
   get name() {
     return this.get("name");
   }
@@ -41,7 +41,7 @@ export class DBFolder extends MainDBFolder {
   }
 }
 
-export class DBFile extends MainDBFolder {
+export class DBFile extends MainDBItem {
   get name() {
     return this.get("name");
   }
@@ -75,5 +75,26 @@ export class DBFile extends MainDBFolder {
 
   constructor() {
     super("File");
+  }
+}
+
+export class StorageInfo extends MainDBItem {
+  get used() {
+    return this.get("used");
+  }
+  set used(value: number) {
+    this.set("used", value);
+  }
+
+  get allowed() {
+    return this.get("allowed");
+  }
+
+  set allowed(value: number) {
+    this.set("allowed", value);
+  }
+
+  constructor() {
+    super("StorageInfo");
   }
 }

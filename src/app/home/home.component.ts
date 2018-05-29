@@ -4,6 +4,7 @@ import { DBFile, DBFolder } from "../api/db-classes";
 import { ActivatedRoute, Router, ParamMap } from "@angular/router";
 import { switchMap } from "rxjs/operators";
 import { ToolbarComponent } from "../toolbar/toolbar.component";
+import { MenuComponent } from "../menu/menu.component";
 
 @Component({
   selector: "supfile-home",
@@ -16,6 +17,7 @@ export class HomeComponent {
   files: DBFile[];
   inProgress = false;
   @ViewChild(ToolbarComponent) toolbar: ToolbarComponent;
+  @ViewChild(MenuComponent) menu: MenuComponent;
 
   constructor(
     private apiService: APIService,
@@ -95,12 +97,20 @@ export class HomeComponent {
 
   removeFolder(folder: DBFolder) {
     this.folders = this.folders.filter(x => x !== folder);
-    folder.destroy();
+    folder.destroy().then(() => {
+      setTimeout(() => {
+        this.menu.refreshStorageInfo();
+      }, 2000);
+    });
   }
 
   removeFile(file: DBFile) {
     this.files = this.files.filter(x => x !== file);
-    file.destroy();
+    file.destroy().then(() => {
+      setTimeout(() => {
+        this.menu.refreshStorageInfo();
+      }, 2000);
+    });
   }
 
   onFilesAdded(file: File) {
@@ -112,6 +122,9 @@ export class HomeComponent {
       console.log(dbFile);
       this.files.push(dbFile);
       this.inProgress = false;
+      setTimeout(() => {
+        this.menu.refreshStorageInfo();
+      }, 2000);
     });
   }
 

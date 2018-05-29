@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as Parse from "parse";
 import { HttpClient } from "@angular/common/http";
-import { DBFile, DBFolder } from "./db-classes";
+import { DBFile, DBFolder, StorageInfo } from "./db-classes";
 import * as fileType from "file-type";
 
 @Injectable()
@@ -22,6 +22,7 @@ export class APIService {
 
     Parse.Object.registerSubclass("File", DBFile);
     Parse.Object.registerSubclass("Folder", DBFolder);
+    Parse.Object.registerSubclass("StorageInfo", StorageInfo);
   }
 
   getCurrentUser() {
@@ -208,5 +209,11 @@ export class APIService {
       },
       { responseType: "blob" }
     );
+  }
+
+  getStorageInfo() {
+    let query = new Parse.Query(StorageInfo);
+    query.equalTo("user", this.getCurrentUser());
+    return Promise.resolve(query.first());
   }
 }
