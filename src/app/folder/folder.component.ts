@@ -89,6 +89,7 @@ export class FolderComponent {
 
   leaveEditMode() {
     this.folder.isInEditMode = false;
+    this.folder.save();
   }
 
   onContextMenuShown(event: Event) {
