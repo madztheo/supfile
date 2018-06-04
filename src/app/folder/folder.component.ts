@@ -16,6 +16,7 @@ import {
 import { DBFolder, DBFile } from "../api/db-classes";
 import { Router } from "@angular/router";
 import { APIService } from "../api/api.service";
+import { FileComponent } from "../file/file.component";
 
 @Component({
   selector: "supfile-folder",
@@ -43,6 +44,9 @@ export class FolderComponent {
   @Output() folderDropped = new EventEmitter<DBFolder>();
   folderState = "in";
   publicLink: string;
+  @Input() index: number;
+  public static onContextMenuOpen = new EventEmitter<DBFolder>();
+
   get isPublic() {
     if (this.folder) {
       return this.folder.getACL().getPublicReadAccess();
@@ -53,15 +57,33 @@ export class FolderComponent {
 
   constructor(private router: Router, private apiService: APIService) {}
 
+  showContextMenu() {
+    this.isContextMenuVisible = true;
+    FolderComponent.onContextMenuOpen.emit(this.folder);
+  }
+
   ngOnInit() {
     if (this.folder) {
       this.publicLink = `${this.apiService.webAppUrl}/public/folders/${
         this.folder.id
       }`;
     }
+    window.addEventListener("click", () => {
+      this.isContextMenuVisible = false;
+    });
+    FileComponent.onContextMenuOpen.subscribe((file: DBFile) => {
+      this.isContextMenuVisible = false;
+    });
+    FolderComponent.onContextMenuOpen.subscribe((folder: DBFolder) => {
+      if (folder.id !== this.folder.id) {
+        this.isContextMenuVisible = false;
+      }
+    });
   }
 
-  editName() {
+  editName(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.folder.isInEditMode = true;
   }
 
@@ -71,18 +93,22 @@ export class FolderComponent {
 
   onContextMenuShown(event: Event) {
     event.preventDefault();
-    this.isContextMenuVisible = true;
+    this.showContextMenu();
   }
 
   onFolderClicked() {
     if (this.isContextMenuVisible) {
-      this.isContextMenuVisible = false;
+      return;
+    }
+    if (this.folder.isInEditMode) {
       return;
     }
     this.router.navigate(["/my-drive/folders", this.folder.id]);
   }
 
-  removeFolder() {
+  removeFolder(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.folderState = "out";
   }
 
@@ -92,28 +118,40 @@ export class FolderComponent {
     }
   }
 
-  download() {
+  download(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.apiService.downloadFolder(this.folder).subscribe(res => {
       const zipLink = window.URL.createObjectURL(res);
       window.open(zipLink);
     });
   }
 
-  shareFolder() {
+  onContextMenuClick(event: Event) {
+    event.stopPropagation();
+  }
+
+  shareFolder(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.apiService.shareFolder(this.folder).then(folder => {
       this.folder = folder;
       console.log(folder);
     });
   }
 
-  stopSharingFolder() {
+  stopSharingFolder(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.apiService.stopSharingFolder(this.folder).then(folder => {
       this.folder = folder;
       console.log(folder);
     });
   }
 
-  copyPublicLink() {
+  copyPublicLink(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     /*(<HTMLInputElement>this.linkInput.nativeElement).select();
     if (document.execCommand("copy")) {
       alert(

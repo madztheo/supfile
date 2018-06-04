@@ -86,6 +86,9 @@ export class HomeComponent {
   createFolder() {
     let folder = new DBFolder();
     folder.name = prompt("Folder name");
+    if (!folder.name) {
+      return;
+    }
     folder.isInEditMode = false;
     folder.user = this.apiService.getCurrentUser();
     if (this.currentFolder) {

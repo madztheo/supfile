@@ -16,6 +16,7 @@ import {
 import { DBFolder, DBFile } from "../api/db-classes";
 import { APIService } from "../api/api.service";
 import { Router } from "@angular/router";
+import { FolderComponent } from "../folder/folder.component";
 
 @Component({
   selector: "supfile-file",
@@ -42,6 +43,8 @@ export class FileComponent {
   @ViewChild("publicLinkInput") linkInput: ElementRef;
   fileState = "in";
   publicLink: string;
+  @Input() index: number;
+  public static onContextMenuOpen = new EventEmitter<DBFile>();
 
   get isPublic() {
     if (this.file) {
@@ -53,15 +56,33 @@ export class FileComponent {
 
   constructor(private apiService: APIService, private router: Router) {}
 
+  showContextMenu() {
+    this.isContextMenuVisible = true;
+    FileComponent.onContextMenuOpen.emit(this.file);
+  }
+
   ngOnInit() {
     if (this.file) {
       this.publicLink = `${this.apiService.webAppUrl}/public/files/${
         this.file.id
       }`;
     }
+    window.addEventListener("click", () => {
+      this.isContextMenuVisible = false;
+    });
+    FolderComponent.onContextMenuOpen.subscribe((folder: DBFolder) => {
+      this.isContextMenuVisible = false;
+    });
+    FileComponent.onContextMenuOpen.subscribe((file: DBFile) => {
+      if (file.id !== this.file.id) {
+        this.isContextMenuVisible = false;
+      }
+    });
   }
 
-  editName() {
+  editName(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.file.isInEditMode = true;
   }
 
@@ -72,12 +93,11 @@ export class FileComponent {
 
   onContextMenuShown(event: Event) {
     event.preventDefault();
-    this.isContextMenuVisible = true;
+    this.showContextMenu();
   }
 
   onFileClicked() {
     if (this.isContextMenuVisible) {
-      this.isContextMenuVisible = false;
       return;
     }
     if (this.file.isInEditMode) {
@@ -89,7 +109,9 @@ export class FileComponent {
     });*/
   }
 
-  removeFile() {
+  removeFile(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.fileState = "out";
   }
 
@@ -99,21 +121,27 @@ export class FileComponent {
     }
   }
 
-  shareFile() {
+  shareFile(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.apiService.shareFile(this.file).then(file => {
       this.file = file;
       console.log(file);
     });
   }
 
-  stopSharingFile() {
+  stopSharingFile(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     this.apiService.stopSharingFile(this.file).then(file => {
       this.file = file;
       console.log(file);
     });
   }
 
-  copyPublicLink() {
+  copyPublicLink(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
     /*(<HTMLInputElement>this.linkInput.nativeElement).select();
     if (document.execCommand("copy")) {
       alert(
@@ -126,5 +154,9 @@ export class FileComponent {
 
   onDrag(ev) {
     ev.dataTransfer.setData("fileId", this.file.id);
+  }
+
+  onContextMenuClick(event: Event) {
+    event.stopPropagation();
   }
 }
