@@ -38,7 +38,7 @@ export class FileViewerComponent {
   ) {}
 
   getRawFile() {
-    this.apiService.getFile(this.file).subscribe(rawFile => {
+    /*this.apiService.getFile(this.file).subscribe(rawFile => {
       console.log(rawFile);
       this.fileUrl = rawFile;
       this.fileType = this.getType(rawFile.type);
@@ -51,7 +51,7 @@ export class FileViewerComponent {
       } else if (this.fileType !== "other") {
         reader.readAsText(this.fileUrl);
       }
-    });
+    });*/
   }
 
   setUrl(url: string) {
@@ -122,6 +122,6 @@ export class FileViewerComponent {
   }
 
   download() {
-    this.openFile();
+    window.open(this.apiService.getFile(this.file));
   }
 }

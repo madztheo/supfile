@@ -122,10 +122,11 @@ export class FolderComponent {
   download(event: Event) {
     event.stopPropagation();
     this.isContextMenuVisible = false;
-    this.apiService.downloadFolder(this.folder).subscribe(res => {
+    /*this.apiService.downloadFolder(this.folder).subscribe(res => {
       const zipLink = window.URL.createObjectURL(res);
       window.open(zipLink);
-    });
+    });*/
+    window.open(this.apiService.getFolderDownloadUrl(this.folder));
   }
 
   onContextMenuClick(event: Event) {

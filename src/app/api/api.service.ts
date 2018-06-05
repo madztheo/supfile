@@ -190,14 +190,23 @@ export class APIService {
   }
 
   getFile(file: DBFile) {
-    return this.http.post(
+    return `${this.serverUrl}/files/download/${
+      file.fileName
+    }?sessionToken=${this.getCurrentUser().getSessionToken()}`;
+    /*return this.http.post(
       `${this.serverUrl}/files/download`,
       {
         fileName: file.fileName,
         sessionToken: this.getCurrentUser().getSessionToken()
       },
       { responseType: "blob" }
-    );
+    );*/
+  }
+
+  getFolderDownloadUrl(folder: DBFolder) {
+    return `${this.serverUrl}/folders/download/${
+      folder.id
+    }?sessionToken=${this.getCurrentUser().getSessionToken()}`;
   }
 
   downloadFolder(folder: DBFolder) {
