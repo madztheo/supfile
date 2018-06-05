@@ -19,6 +19,8 @@ import { APIService } from "./api/api.service";
 import { HttpClientModule } from "@angular/common/http";
 import { FileComponent } from "./file/file.component";
 import { FileViewerComponent } from "./file-viewer/file-viewer.component";
+import { PresentationComponent } from "./presentation/presentation.component";
+import { AuthGuard } from "./auth.guard";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { FileViewerComponent } from "./file-viewer/file-viewer.component";
     LogInComponent,
     SignUpComponent,
     ToolbarComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    PresentationComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,7 @@ import { FileViewerComponent } from "./file-viewer/file-viewer.component";
     ChartModule,
     HttpClientModule
   ],
-  providers: [APIService],
+  providers: [APIService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
