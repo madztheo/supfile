@@ -14,13 +14,26 @@
   }
   .main-content.row {
     height: 100%;
+    position: relative;
     .left-pane {
       height: 100%;
     }
     .folder-grid {
-      padding: 40px 20px 20px 20px;
+      padding: 60px 20px 20px 20px;
       overflow-y: auto;
       transition: 200ms ease-in;
+      position: relative;
+    }
+    .progress {
+      position: absolute;
+      width: 75%;
+      height: 30px;
+      bottom: 0;
+      left: calc(25% - 15px);
+      border-radius: 0;
+      .progress-bar {
+        background-color: #44bf65;
+      }
     }
   }
 }

@@ -5,7 +5,8 @@
   </div>
   <div class="storage-chart">
     <p-chart type="doughnut" [data]="chartData" [options]="chartOptions"></p-chart>
-    <p>{{ storageUsed }}GB used out of {{ totalStorage }}GB</p>
+    <p>{{ getFormattedSize(storageUsed) | number }}{{ getStorageSuffix(storageUsed) }} used out of {{ getFormattedSize(totalStorage)
+      | number }}{{ getStorageSuffix(totalStorage) }}</p>
   </div>
   <button class="settings-btn">
     <i class="fas fa-cog"></i>

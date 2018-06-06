@@ -2,16 +2,17 @@
   <div class="centered-content">
     <form (ngSubmit)="onSubmit($event)" #loginForm="ngForm">
       <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <label for="username">Username</label>
+        <input name="username" [(ngModel)]="username" type="text" class="form-control" id="username" aria-describedby="emailHelp"
+          placeholder="Your username">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password">
+        <input type="password" [(ngModel)]="password" name="password" class="form-control" id="password" placeholder="Password">
       </div>
       <button type="submit" class="btn btn-primary">Sign in</button>
       <button type="button" class="btn btn-primary secondary-btn" (click)="signUp()">I don't have an account</button>
-			<button id="google" class="g-signin2 btn btn-primary secondary-btn" data-onsuccess="onSignIn" ></button>
     </form>
+    <button id="googlelogin" class="btn btn-primary">Sign in with Google</button>
   </div>
 </div>

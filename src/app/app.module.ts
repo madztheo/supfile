@@ -15,6 +15,13 @@ import { LogInComponent } from "./login/login.component";
 import { NotFoundComponent } from "./notfound/notfound.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { APIService } from "./api/api.service";
+import { HttpClientModule } from "@angular/common/http";
+import { FileComponent } from "./file/file.component";
+import { FileViewerComponent } from "./file-viewer/file-viewer.component";
+import { PresentationComponent } from "./presentation/presentation.component";
+import { AuthGuard } from "./auth.guard";
+
 
 @NgModule({
   declarations: [
@@ -22,10 +29,13 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     HomeComponent,
     MenuComponent,
     FolderComponent,
+    FileComponent,
+    FileViewerComponent,
     LogInComponent,
     SignUpComponent,
     ToolbarComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    PresentationComponent
   ],
   imports: [
     BrowserModule,
@@ -33,9 +43,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     RouterModule,
     AppRoutingModule,
     FormsModule,
-    ChartModule
+    ChartModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [APIService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
