@@ -1,11 +1,19 @@
 <div class="container main-container">
-  <supfile-toolbar (onCreateNewFolder)="createFolder()"></supfile-toolbar>
+  <supfile-toolbar (onCreateNewFolder)="createFolder()" (newFilesAdded)="onFilesAdded($event)" (fileDropped)="onFileMoved($event)"
+    (folderDropped)="onFolderMoved($event)"></supfile-toolbar>
   <div class="row main-content">
     <div class="col-3 left-pane">
       <supfile-menu></supfile-menu>
     </div>
     <div class="col-9 folder-grid">
-      <supfile-folder *ngFor="let folder of folders" (onRemove)="removeFolder(folder)" [folder]="folder"></supfile-folder>
+      <supfile-folder *ngFor="let folder of folders; let j = index;" (fileDropped)="onFileMoved($event)" (folderDropped)="onFolderMoved($event)"
+        (onRemove)="removeFolder(folder)" [folder]="folder" [index]="folders.length - j + (files ? files.length : 0)"></supfile-folder>
+      <supfile-file *ngFor="let file of files; let i = index;" (onRemove)="removeFile(file)" [index]="files.length - i" [file]="file"></supfile-file>
+
+    </div>
+    <div *ngIf="inProgress" class="progress">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+        aria-valuemax="100" style="width: 100%"></div>
     </div>
   </div>
 </div>

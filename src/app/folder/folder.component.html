@@ -1,13 +1,19 @@
-<div [@inOutFolderAnim]="folderState" (@inOutFolderAnim.done)="onHidingFolderDone()" draggable="true" (click)="hideContextMenu()"
-  class="main-container" (contextmenu)="onContextMenuShown($event)">
+<div [style.z-index]="index + 1" [@inOutFolderAnim]="folderState" (@inOutFolderAnim.done)="onHidingFolderDone()" draggable="true"
+  (click)="onFolderClicked()" class="main-container" (contextmenu)="onContextMenuShown($event)" (dragstart)="onDrag($event)"
+  draggable="true" (drop)="onDrop($event)" (dragover)="allowDrop($event)">
   <i class="fas fa-folder"></i>
   <p *ngIf="!folder.isInEditMode">{{ folder.name }}</p>
   <input *ngIf="folder.isInEditMode" type="text" [(ngModel)]="folder.name" class="form-control" placeholder="Name the folder"
     (keyup.enter)="leaveEditMode()">
-  <div class="context-menu" *ngIf="isContextMenuVisible">
+  <div class="context-menu" (click)="onContextMenuClick($event)" *ngIf="isContextMenuVisible">
     <ul>
-      <li (click)="removeFolder()">Remove</li>
-      <li (click)="editName()">Rename</li>
+      <li *ngIf="isPublic" (click)="copyPublicLink($event)">Copy public link</li>
+      <li (click)="isPublic ? stopSharingFolder($event) : shareFolder($event)">
+        {{ isPublic ? 'Make private' : 'Share publicly' }}
+      </li>
+      <li (click)="download($event)">Download</li>
+      <li (click)="editName($event)">Rename</li>
+      <li (click)="removeFolder($event)">Remove</li>
     </ul>
   </div>
 </div>
