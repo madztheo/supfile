@@ -19,6 +19,9 @@
       border: none;
       color: rgb(88, 102, 124);
     }
+    #googlelogin {
+      margin-top: 10px;
+    }
   }
 }
 
@@ -26,7 +29,6 @@
   from {
     transform: scale(0);
   }
-
   to {
     transform: scale(1);
   }

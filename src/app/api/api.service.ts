@@ -278,11 +278,16 @@ export class APIService {
    *  Sign in Google user
    * */
   signGoogle(profile) {
-    this.signUp(profile.getEmail(), profile.getName(), profile.getId()).catch(
-      (err: any) => {
+    return this.signUp(
+      profile.getEmail(),
+      profile.getName(),
+      profile.getId()
+    ).then(
+      user => user,
+      err => {
         if (err.code === 202) {
           console.log("username already taken");
-          this.logIn(profile.getName(), profile.getId());
+          return this.logIn(profile.getName(), profile.getId());
         }
       }
     );

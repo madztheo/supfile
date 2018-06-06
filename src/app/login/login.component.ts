@@ -45,9 +45,11 @@ export class LogInComponent {
       {},
       googleUser => {
         const profile = googleUser.getBasicProfile();
-        if (profile.getId() !== "") {
-          this.apiService.signGoogle(profile);
-          window.location.assign("/");
+        if (profile.getId()) {
+          this.apiService.signGoogle(profile).then(() => {
+            //For some reason usual router doesn't work properly here
+            window.location.assign("/");
+          });
         }
       },
       function(error) {

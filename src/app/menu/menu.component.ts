@@ -12,7 +12,7 @@ export class MenuComponent {
   chartData: any;
   chartOptions: any;
   storageUsed = 0;
-  totalStorage = 0;
+  totalStorage = Math.pow(10, 9) * 30;
 
   constructor(private router: Router, private apiService: APIService) {}
 
@@ -65,8 +65,10 @@ export class MenuComponent {
 
   refreshStorageInfo() {
     this.apiService.getStorageInfo().then(storageInfo => {
-      this.storageUsed = storageInfo.used;
-      this.totalStorage = storageInfo.allowed;
+      if (storageInfo) {
+        this.storageUsed = storageInfo.used;
+        this.totalStorage = storageInfo.allowed;
+      }
       this.setChartData();
     });
   }
