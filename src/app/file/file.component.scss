@@ -8,6 +8,9 @@
   transition: 200ms ease-in;
   cursor: pointer;
   animation: enterAnimation 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1;
+  &.edit-mode {
+    top: -21px;
+  }
   &:active {
     transform: scale(0.9);
   }

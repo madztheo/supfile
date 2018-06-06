@@ -1,5 +1,5 @@
-<div [style.z-index]="index + 1" [@inOutFileAnim]="fileState" (@inOutFileAnim.done)="onHidingFileDone()" draggable="true"
-  (click)="onFileClicked()" class="main-container" (dragstart)="onDrag($event)" (contextmenu)="onContextMenuShown($event)">
+<div [ngClass]="{ 'edit-mode' : file.isInEditMode }" [style.z-index]="index + 1" [@inOutFileAnim]="fileState" (@inOutFileAnim.done)="onHidingFileDone()"
+  draggable="true" (click)="onFileClicked()" class="main-container" (dragstart)="onDrag($event)" (contextmenu)="onContextMenuShown($event)">
   <i class="fas fa-file"></i>
   <p *ngIf="!file.isInEditMode">{{ file.name }}</p>
   <input *ngIf="file.isInEditMode" type="text" [(ngModel)]="file.name" class="form-control" placeholder="Name the file" (keyup.enter)="leaveEditMode()">
@@ -14,5 +14,4 @@
       <li (click)="editName($event)">Rename</li>
     </ul>
   </div>
-  <input #publicLinkInput id="publicLinkInput" type="text" style="display: none;" [(ngModel)]="publicLink" />
 </div>
