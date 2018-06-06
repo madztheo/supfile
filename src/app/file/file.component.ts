@@ -139,16 +139,15 @@ export class FileComponent {
     });
   }
 
+  download(event: Event) {
+    event.stopPropagation();
+    this.isContextMenuVisible = false;
+    window.open(this.apiService.getFileDownloadUrl(this.file));
+  }
+
   copyPublicLink(event: Event) {
     event.stopPropagation();
     this.isContextMenuVisible = false;
-    /*(<HTMLInputElement>this.linkInput.nativeElement).select();
-    if (document.execCommand("copy")) {
-      alert(
-        "Link copied in clipboard : " +
-          (<HTMLInputElement>this.linkInput.nativeElement).value
-      );
-    }*/
     prompt("Share link", this.publicLink);
   }
 

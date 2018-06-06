@@ -122,10 +122,6 @@ export class FolderComponent {
   download(event: Event) {
     event.stopPropagation();
     this.isContextMenuVisible = false;
-    /*this.apiService.downloadFolder(this.folder).subscribe(res => {
-      const zipLink = window.URL.createObjectURL(res);
-      window.open(zipLink);
-    });*/
     window.open(this.apiService.getFolderDownloadUrl(this.folder));
   }
 
@@ -154,13 +150,6 @@ export class FolderComponent {
   copyPublicLink(event: Event) {
     event.stopPropagation();
     this.isContextMenuVisible = false;
-    /*(<HTMLInputElement>this.linkInput.nativeElement).select();
-    if (document.execCommand("copy")) {
-      alert(
-        "Link copied in clipboard : " +
-          (<HTMLInputElement>this.linkInput.nativeElement).value
-      );
-    }*/
     prompt("Share link", this.publicLink);
   }
 

@@ -37,23 +37,6 @@ export class FileViewerComponent {
     private http: HttpClient
   ) {}
 
-  getRawFile() {
-    /*this.apiService.getFile(this.file).subscribe(rawFile => {
-      console.log(rawFile);
-      this.fileUrl = rawFile;
-      this.fileType = this.getType(rawFile.type);
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fileContent = e.target.result;
-      };
-      if (this.fileType !== "text" && this.fileType !== "other") {
-        reader.readAsDataURL(this.fileUrl);
-      } else if (this.fileType !== "other") {
-        reader.readAsText(this.fileUrl);
-      }
-    });*/
-  }
-
   setUrl(url: string) {
     this.fileType = this.getType(this.file.type);
     this.fileUrl = url;
@@ -71,9 +54,8 @@ export class FileViewerComponent {
   }
 
   getFileUrl() {
-    this.apiService.getFileUrl(this.file).then(({ url }) => {
-      this.setUrl(url);
-    });
+    this.fileType = this.getType(this.file.type);
+    this.fileUrl = this.apiService.getFileUrl(this.file);
   }
 
   getType(mimeType: string) {
@@ -122,6 +104,6 @@ export class FileViewerComponent {
   }
 
   download() {
-    window.open(this.apiService.getFile(this.file));
+    window.open(this.apiService.getFileDownloadUrl(this.file));
   }
 }

@@ -9,6 +9,7 @@
       <li (click)="isPublic ? stopSharingFile($event) : shareFile($event)">
         {{ isPublic ? 'Make private' : 'Share publicly' }}
       </li>
+      <li (click)="download($event)">Download</li>
       <li (click)="removeFile($event)">Remove</li>
       <li (click)="editName($event)">Rename</li>
     </ul>
