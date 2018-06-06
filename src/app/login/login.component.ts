@@ -15,6 +15,7 @@ export class LogInComponent {
   auth2: any;
 
   ngAfterViewInit() {
+    //Initiate the connection to Google API
     gapi.load("auth2", () => {
       this.auth2 = gapi.auth2.init({
         client_id:
@@ -28,6 +29,9 @@ export class LogInComponent {
 
   constructor(private router: Router, private apiService: APIService) {}
 
+  /**
+   * Log in the user with the username and password provided
+   */
   logIn() {
     this.apiService.logIn(this.username, this.password).then(() => {
       this.router.navigate(["/"]);
@@ -40,12 +44,14 @@ export class LogInComponent {
   }
 
   attachSignin(element) {
+    //Listen for sign in with Google
     this.auth2.attachClickHandler(
       element,
       {},
       googleUser => {
         const profile = googleUser.getBasicProfile();
         if (profile.getId()) {
+          //Sign in the user with its Google account
           this.apiService.signGoogle(profile).then(() => {
             //For some reason usual router doesn't work properly here
             window.location.assign("/");
@@ -58,6 +64,9 @@ export class LogInComponent {
     );
   }
 
+  /**
+   * Redirect to sign up page
+   */
   signUp() {
     this.router.navigate(["/signup"]);
   }

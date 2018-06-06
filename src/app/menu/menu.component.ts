@@ -16,6 +16,9 @@ export class MenuComponent {
 
   constructor(private router: Router, private apiService: APIService) {}
 
+  /**
+   * Set the data for the storage chart
+   */
   setChartData() {
     this.chartData = {
       datasets: [
@@ -31,6 +34,9 @@ export class MenuComponent {
     };
   }
 
+  /**
+   * Set the options for storage chart
+   */
   setChartOptions() {
     this.chartOptions = {
       legend: {
@@ -39,6 +45,10 @@ export class MenuComponent {
     };
   }
 
+  /**
+   * Format a number
+   * @param size Size of a file to format
+   */
   getFormattedSize(size: number) {
     if (size < Math.pow(10, 3)) {
       return size;
@@ -51,6 +61,10 @@ export class MenuComponent {
     }
   }
 
+  /**
+   * Get the scale of bytes to use according to the size given
+   * @param size The size of a file
+   */
   getStorageSuffix(size: number) {
     if (size < Math.pow(10, 3)) {
       return "B";
@@ -63,7 +77,11 @@ export class MenuComponent {
     }
   }
 
+  /**
+   * Refresh the data of the chart
+   */
   refreshStorageInfo() {
+    //Get the storage information
     this.apiService.getStorageInfo().then(storageInfo => {
       if (storageInfo) {
         this.storageUsed = storageInfo.used;
@@ -79,6 +97,9 @@ export class MenuComponent {
     this.refreshStorageInfo();
   }
 
+  /**
+   * Sign out the user and redirect to the log in page
+   */
   signOut() {
     this.apiService.logOut().then(() => {
       this.router.navigate(["/login"]);

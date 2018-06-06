@@ -12,14 +12,21 @@ export class PresentationComponent {
 
   ngOnInit() {
     if (this.apiService.getCurrentUser()) {
+      //If the user is already connect, we redirect him to its dashboard
       this.router.navigate(["/my-drive"]);
     }
   }
 
+  /**
+   * Redirect to login page
+   */
   login() {
     this.router.navigate(["/login"]);
   }
 
+  /**
+   * Redirect to sign up page
+   */
   signup() {
     this.router.navigate(["/signup"]);
   }
