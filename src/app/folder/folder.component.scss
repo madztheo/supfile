@@ -7,6 +7,9 @@
   position: relative;
   transition: 200ms ease-in;
   cursor: pointer;
+  &.edit-mode {
+    top: -21px;
+  }
   &:active {
     transform: scale(0.9);
   }
