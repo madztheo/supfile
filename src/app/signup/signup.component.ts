@@ -15,6 +15,9 @@ export class SignUpComponent {
 
   constructor(private router: Router, private apiService: APIService) {}
 
+  /**
+   * Sign up the user with the information given
+   */
   signUp() {
     if (
       this.username &&
@@ -38,6 +41,9 @@ export class SignUpComponent {
     this.signUp();
   }
 
+  /**
+   * Redirect to login page
+   */
   logIn() {
     this.router.navigate(["/login"]);
   }

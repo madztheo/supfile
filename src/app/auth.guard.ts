@@ -7,7 +7,6 @@ export class AuthGuard implements CanActivate {
   constructor(private apiService: APIService, private router: Router) {}
 
   canActivate() {
-    console.log("AuthGuard#canActivate called");
     const isConnected = !!this.apiService.getCurrentUser();
     if (!isConnected) {
       this.router.navigate(["/"]);
