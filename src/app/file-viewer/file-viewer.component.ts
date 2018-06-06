@@ -37,29 +37,42 @@ export class FileViewerComponent {
     private http: HttpClient
   ) {}
 
+  /**
+   * Set the url of the file
+   * @param url
+   */
   setUrl(url: string) {
     this.fileType = this.getType(this.file.type);
     this.fileUrl = url;
     if (this.fileType === "text") {
+      //If it's a file text, we get its content to inject it in the page
       this.http.get(this.fileUrl, { responseType: "text" }).subscribe(text => {
         this.fileContent = text;
       });
     }
   }
 
+  /**
+   * Set the url of the file if it's public
+   */
   getPublicFileUrl() {
     this.apiService.getPublicFileUrl(this.file).then(({ url }) => {
       this.setUrl(url);
     });
   }
 
+  /**
+   * Set the url of the file if it's private
+   */
   getFileUrl() {
-    this.fileType = this.getType(this.file.type);
-    this.fileUrl = this.apiService.getFileUrl(this.file);
+    this.setUrl(this.apiService.getFileUrl(this.file));
   }
 
+  /**
+   * Get the type of the file
+   * @param mimeType The MIME type to analyze
+   */
   getType(mimeType: string) {
-    console.log(mimeType);
     if (mimeType.startsWith("image")) {
       return "image";
     } else if (mimeType.startsWith("video")) {
@@ -82,7 +95,9 @@ export class FileViewerComponent {
         .pipe(
           switchMap((params: ParamMap) => {
             if (params.has("id")) {
+              //We get the id from the route params
               const fileId = params.get("id");
+              //We get the file with the given id
               return this.apiService.getDBFile(fileId);
             }
             return null;
@@ -99,10 +114,18 @@ export class FileViewerComponent {
     }
   }
 
+  /**
+   * Open the file. Will view directly in the browser, if it can or will
+   * download it otherwise
+   */
   openFile() {
     window.open(this.fileUrl);
   }
 
+  /**
+   * Download the file. Will always download the file, wheter the browser
+   * can show it directly or not
+   */
   download() {
     window.open(this.apiService.getFileDownloadUrl(this.file));
   }

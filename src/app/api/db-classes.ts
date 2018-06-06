@@ -1,5 +1,10 @@
 import * as Parse from "parse";
 
+/**
+ * Main class used by other database object
+ * Contains the common property shared by all the objects,
+ * that is the pointer to the user owning the object.
+ */
 export class MainDBItem extends Parse.Object {
   get user() {
     return this.get("user");
@@ -13,11 +18,15 @@ export class MainDBItem extends Parse.Object {
   }
 
   save() {
+    //Set the ACL so that only the user can read and write it
     this.setACL(new Parse.ACL(this.user));
     return super.save();
   }
 }
 
+/**
+ * A folder, only represented in database not in data storage
+ */
 export class DBFolder extends MainDBItem {
   get name() {
     return this.get("name");
@@ -41,7 +50,11 @@ export class DBFolder extends MainDBItem {
   }
 }
 
+/**
+ * Representation of file in the database
+ */
 export class DBFile extends MainDBItem {
+  //The database name of the file (which can be changed for renaming)
   get name() {
     return this.get("name");
   }
@@ -49,6 +62,7 @@ export class DBFile extends MainDBItem {
     this.set("name", value);
   }
 
+  //The original name of the file (will not change)
   get fileName() {
     return this.get("fileName");
   }
@@ -64,6 +78,7 @@ export class DBFile extends MainDBItem {
     this.set("folder", value);
   }
 
+  //MIME type of the file
   get type() {
     return this.get("type");
   }
@@ -78,7 +93,11 @@ export class DBFile extends MainDBItem {
   }
 }
 
+/**
+ * Represent information about a user's storage use
+ */
 export class StorageInfo extends MainDBItem {
+  //Storage used by the user in bytes
   get used() {
     return this.get("used");
   }
@@ -86,6 +105,7 @@ export class StorageInfo extends MainDBItem {
     this.set("used", value);
   }
 
+  //Max storage the user is allowed to used
   get allowed() {
     return this.get("allowed");
   }
