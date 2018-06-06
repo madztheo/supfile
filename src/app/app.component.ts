@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { APIService } from "./api/api.service";
 
 @Component({
-  selector: "app-root",
-  template: "<router-outlet></router-outlet>"
+    selector: 'app-root',
+    template: '<router-outlet></router-outlet>'
 })
 export class AppComponent {
   title = "app";
@@ -14,3 +14,4 @@ export class AppComponent {
     this.apiService.initializeConnectionToServer();
   }
 }
+
