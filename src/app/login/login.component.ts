@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { APIService } from '../api/api.service';
 
 declare const gapi: any;
 
@@ -12,7 +12,7 @@ declare const gapi: any;
 })
 export class LogInComponent {
 
-    constructor(public router: Router) {}
+    constructor(public router: Router, private apiService: APIService) {}
     auth2: any;
     ngAfterViewInit() {
         gapi.load('auth2',  () => {
@@ -29,16 +29,10 @@ export class LogInComponent {
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
                 const profile = googleUser.getBasicProfile();
-                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-                console.log('Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
-                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
                 if (profile.getId() !== '' ) {
-
-
-                    window.location.assign('/dashboard');
-
-                }
+                    this.apiService.signGoogle(profile);
+                    window.location.assign('/');
+                                        }
             }, function (error) {
                 console.log(error);
             });
