@@ -3,12 +3,13 @@ import * as Parse from "parse";
 import { HttpClient } from "@angular/common/http";
 import { DBFile, DBFolder, StorageInfo } from "./db-classes";
 import * as fileType from "file-type";
+import { environment } from "../../environments/environment";
 
 @Injectable()
 export class APIService {
-  private serverUrl = "http://localhost:1337";
-  private serverPublicKey = "r2iHRgNfOM8lih4";
-  public webAppUrl = "http://localhost:4200";
+  private serverUrl = environment.serverUrl;
+  private serverPublicKey = environment.parsePublicKey;
+  public webAppUrl = `http://${window.location.host}`;
 
   constructor(private http: HttpClient) {}
 
